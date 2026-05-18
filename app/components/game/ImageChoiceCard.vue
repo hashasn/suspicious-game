@@ -18,17 +18,24 @@
     >
       AI GENERATED
     </div>
+    <button
+      v-if="isPending"
+      class="mt-4 w-full border-2 border-black bg-[#A555EC] px-4 py-3 font-black uppercase text-white shadow-[4px_4px_0px_#000]"
+      @click.stop="$emit('confirm')"
+    >
+      Confirm Choice
+    </button>
   </button>
 </template>
 
 <script setup>
 defineProps({
-  side: String,
   image: String,
+  side: String,
   hasSelected: Boolean,
-  correctAnswer: String,
+  isPending: Boolean,
   cardClass: String,
 });
 
-defineEmits(["choose"]);
+defineEmits(["choose", "confirm"]);
 </script>

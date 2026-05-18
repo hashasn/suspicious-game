@@ -30,18 +30,22 @@
         side="A"
         :image="displayedRound.imageA"
         :has-selected="hasSelected"
+        :is-pending="pendingChoice === 'A'"
         :correct-answer="displayedRound.correctAnswer"
         :card-class="cardClassA"
         @choose="$emit('choose', $event)"
+        @confirm="$emit('confirm')"
       />
 
       <GameImageChoiceCard
         side="B"
         :image="displayedRound.imageB"
         :has-selected="hasSelected"
+        :is-pending="pendingChoice === 'B'"
         :correct-answer="displayedRound.correctAnswer"
         :card-class="cardClassB"
         @choose="$emit('choose', $event)"
+        @confirm="$emit('confirm')"
       />
     </div>
   </section>
@@ -55,7 +59,8 @@ defineProps({
   progressPercent: Number,
   cardClassA: String,
   cardClassB: String,
+  pendingChoice: String,
 });
 
-defineEmits(["choose"]);
+defineEmits(["choose", "confirm"]);
 </script>

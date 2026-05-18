@@ -2,9 +2,18 @@
   <header
     class="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-8"
   >
-    <NuxtLink to="/" class="font-black hover:text-[#A555EC] transition">
+    <!-- <div
+      @click="goBack"
+      class="font-black hover:text-[#A555EC] transition hover:cursor-pointer"
+    >
       ← Exit Case
-    </NuxtLink>
+    </div> -->
+    <div
+      @click="exitCase"
+      class="font-black hover:text-[#A555EC] transition hover:cursor-pointer"
+    >
+      ← Exit Case
+    </div>
 
     <div class="flex flex-wrap gap-3 text-sm font-black">
       <div
@@ -42,4 +51,14 @@ defineProps({
   totalRounds: Number,
   formattedTime: String,
 });
+
+const router = useRouter();
+
+// const goBack = () => {
+//   router.back();
+// };
+
+const exitCase = () => {
+  router.push("/archive");
+};
 </script>

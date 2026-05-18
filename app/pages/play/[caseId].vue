@@ -28,10 +28,12 @@
         :current-round="currentRound"
         :displayed-round="displayedRound"
         :has-selected="hasSelected"
+        :pending-choice="pendingChoice"
         :progress-percent="progressPercent"
         :card-class-a="cardClass('A')"
         :card-class-b="cardClass('B')"
         @choose="chooseImage"
+        @confirm="confirmChoice"
       />
 
       <GameResultPanel
@@ -44,12 +46,12 @@
       />
     </div>
 
-    <GameConfirmChoiceModal
+    <!-- <GameConfirmChoiceModal
       :show="showConfirmModal"
       :pending-choice="pendingChoice"
       @cancel="cancelChoice"
       @confirm="confirmChoice"
-    />
+    /> -->
 
     <GameBriefingModal :show="showBriefing" @close="closeBriefing" />
 
@@ -58,18 +60,49 @@
 </template>
 
 <script setup>
-const { todaysCase, caseRounds } = useDailyCase();
+definePageMeta({
+  key: (route) => route.fullPath,
+});
+const route = useRoute();
+const { todaysCase, getCaseById } = useCases();
+
+// const selectedCase = computed(() => {
+//   const caseId = Number(route.params.caseId);
+//   return getCaseById(caseId) || todaysCase.value;
+// });
+const selectedCase = computed(() => {
+  const caseId = route.params.caseId;
+  return getCaseById(caseId);
+});
+
+if (!selectedCase.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Case not found",
+  });
+}
+// console.log(route.params.caseId);
+// console.log(selectedCase.value);
+// const storageKey = computed(() => {
+//   return `suspicious-save-case-${selectedCase.value.id}`;
+// });
+
+const caseRounds = computed(() => {
+  return selectedCase.value.rounds;
+});
 
 const gameFinished = ref(false);
 
 const { elapsedSeconds, formattedTime, startTimer, stopTimer } =
   useGameTimer(gameFinished);
 
+// const { leaderboard, latestRank, saveLeaderboardResult } = useLeaderboard();
 const game = useGameState({
   caseRounds,
   elapsedSeconds,
   startTimer,
   stopTimer,
+  // storageKey,
 });
 
 gameFinished.value = game.gameFinished.value;
@@ -105,7 +138,7 @@ const {
 const { showToast, toastMessage, triggerToast } = useToast();
 
 const { shareResult } = useShareResult({
-  todaysCase,
+  todaysCase: selectedCase,
   caseRounds,
   score,
   results,

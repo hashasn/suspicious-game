@@ -45,10 +45,17 @@
             class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
             <NuxtLink
-              to="/play"
+              :to="`/play/${todaysCase.id}`"
               class="inline-flex items-center justify-center border-2 border-black bg-black text-white px-9 py-4 font-black uppercase shadow-[6px_6px_0px_#A555EC] hover:translate-x-1 hover:translate-y-1 hover:shadow-[3px_3px_0px_#A555EC] transition"
             >
               Start Today’s Case
+            </NuxtLink>
+
+            <NuxtLink
+              to="/archive"
+              class="inline-flex items-center justify-center border-2 border-black bg-white px-6 py-4 font-black uppercase shadow-[5px_5px_0px_#000]"
+            >
+              View Archive
             </NuxtLink>
           </div>
 
@@ -123,12 +130,28 @@
 
         <span class="hidden md:inline">•</span>
 
-        <p>Case No. 001</p>
+        <p>Day No. {{ dayCount }}</p>
 
-        <span class="hidden md:inline">•</span>
+        <!-- <span class="hidden md:inline">•</span>
 
-        <p>Daily AI image investigation</p>
+        <p>Daily AI image investigation</p> -->
       </div>
     </section>
   </main>
 </template>
+
+<script setup>
+const { todaysCase } = useCases();
+import { rounds } from "~/data/rounds";
+
+const startDate = new Date(rounds[0].date.split("/").reverse().join("-"));
+const today = new Date();
+
+const dayCount = computed(() => {
+  const diff = today - startDate;
+
+  const dayNum = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+
+  return String(dayNum).padStart(3, "0");
+});
+</script>

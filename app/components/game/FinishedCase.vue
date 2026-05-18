@@ -26,6 +26,13 @@
     </div>
 
     <div
+      class="border-2 border-black bg-[#A555EC] text-white p-5 mb-8 shadow-[4px_4px_0px_#000]"
+    >
+      <p class="text-xs font-black uppercase tracking-widest">Detective Rank</p>
+      <p class="text-4xl font-black mt-1">{{ resultTitle }}</p>
+    </div>
+
+    <div
       class="border-2 border-black bg-white p-5 text-neutral-700 mb-8 shadow-[4px_4px_0px_#000]"
     >
       <p class="text-xs font-black uppercase text-[#A555EC] mb-2">
@@ -72,7 +79,7 @@
       </button>
 
       <NuxtLink
-        to="/"
+        to="/archive"
         class="border-2 border-black bg-white text-black px-7 py-3 font-black uppercase shadow-[4px_4px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#000] transition"
       >
         Case Files

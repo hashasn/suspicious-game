@@ -1,7 +1,7 @@
 export const rounds = [
   {
     id: 1,
-    date: "17/05/2026",
+    date: "16/05/2026",
     title: "The First Investigation",
     totalRounds: 15,
     rounds: [
@@ -146,6 +146,149 @@ export const rounds = [
         difficulty: "Hard",
         explanation:
           "Look at the boat textures and reflections for surfaces that seem overly polished or artificial.",
+      },
+    ],
+  },
+  {
+    id: 2,
+    date: "17/05/2026",
+    title: "The Second Investigation",
+    totalRounds: 7,
+    rounds: [
+      {
+        id: 1,
+        realImage: "/dog_real.avif",
+        aiImage: "/dog_ai.png",
+        category: "animal",
+        difficulty: "Easy",
+        explanation:
+          "Look closely at the fur, eyes, and background details for textures that seem overly smooth or repeated.",
+      },
+      {
+        id: 2,
+        realImage: "/burger_real.avif",
+        aiImage: "/burger_ai.png",
+        category: "Food",
+        difficulty: "Medium",
+        explanation:
+          "Look at the food textures, melted cheese, and fries for details that appear overly perfect or artificially smooth.",
+      },
+      {
+        id: 3,
+        realImage: "/bedroom_real.avif",
+        aiImage: "/bedroom_ai.png",
+        category: "Interior",
+        difficulty: "Hard",
+        explanation:
+          "Look at furniture edges, lighting, and decorations for distorted shapes or repeated patterns.",
+      },
+      {
+        id: 4,
+        realImage: "/street_real.avif",
+        aiImage: "/street_ai.png",
+        category: "Buildings",
+        difficulty: "Medium",
+        explanation:
+          "Check signs, vehicles, and distant people for warped details or unnatural lighting.",
+      },
+      {
+        id: 5,
+        realImage: "/bike_real.avif",
+        aiImage: "/bike_ai.jpeg",
+        category: "Vehicles",
+        difficulty: "Hard",
+        explanation:
+          "Look at the wheel spokes, shadows, and frame details for shapes that seem warped or unnaturally clean.",
+      },
+      {
+        id: 6,
+        realImage: "/forest_real.avif",
+        aiImage: "/forest_ai.png",
+        category: "Nature",
+        difficulty: "Medium",
+        explanation:
+          "Check the trees, leaves, and shadows for repeating textures or overly sharp details.",
+      },
+      {
+        id: 7,
+        realImage: "/class_real.avif",
+        aiImage: "/class_ai.png",
+        category: "People",
+        difficulty: "Hard",
+        explanation:
+          "Look at the reflections, chair details, and window lighting for patterns that seem overly clean or unnaturally consistent.",
+      },
+    ],
+  },
+
+  {
+    id: 3,
+    date: "18/05/2026",
+    title: "The Third Investigation",
+    totalRounds: 7,
+    rounds: [
+      {
+        id: 1,
+        realImage: "/office_real.avif",
+        aiImage: "/office_ai.png",
+        category: "Interior",
+        difficulty: "Easy",
+        explanation:
+          "Look at monitors, keyboards, and desk objects for distorted shapes or repeated details.",
+      },
+      {
+        id: 2,
+        realImage: "/pizza_real.avif",
+        aiImage: "/pizza_ai.png",
+        category: "Food",
+        difficulty: "Easy",
+        explanation:
+          "Check the toppings and melted cheese for textures that appear too smooth or perfectly placed.",
+      },
+      {
+        id: 3,
+        realImage: "/bridge_real.avif",
+        aiImage: "/bridge_ai.png",
+        category: "Buildings",
+        difficulty: "Hard",
+        explanation:
+          "Look at the water reflections, leaf patterns, and bridge details for textures that seem repeated or overly perfect.",
+      },
+      {
+        id: 4,
+        realImage: "/man_real.avif",
+        aiImage: "/man_ai.png",
+        category: "People",
+        difficulty: "Medium",
+        explanation:
+          "Pay attention to facial symmetry, teeth, and skin textures that look overly polished.",
+      },
+      {
+        id: 5,
+        realImage: "/car_real.avif",
+        aiImage: "/car_ai.png",
+        category: "Vehicles",
+        difficulty: "Hard",
+        explanation:
+          "Look closely at reflections, wheels, and body panels for details that seem too perfect or unrealistic.",
+      },
+      {
+        id: 6,
+        realImage: "/snow_real.avif",
+        aiImage: "/snow_ai.png",
+        category: "Nature",
+        difficulty: "Hard",
+        explanation:
+          "Check the snow, trees, and shadows for repeated textures or unnatural lighting.",
+      },
+      {
+        id: 7,
+        realImage: "/market_real.avif",
+        aiImage: "/market_ai.png",
+        category: "People",
+        difficulty: "Hard",
+        explanation:
+          "Look at faces, hands, and background objects for repeated patterns or distorted shapes.",
       },
     ],
   },

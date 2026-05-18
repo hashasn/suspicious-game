@@ -3,6 +3,7 @@ export function useGameState({
   elapsedSeconds,
   startTimer,
   stopTimer,
+  storageKey = "suspicious-save",
 }) {
   const score = ref(0);
   const streak = ref(0);
@@ -15,13 +16,13 @@ export function useGameState({
   const pendingChoice = ref(null);
   const showConfirmModal = ref(false);
 
+  const isRestoring = ref(false);
+
   const currentRound = computed(() => {
     return caseRounds.value[currentIndex.value];
   });
 
-  const hasSelected = computed(() => {
-    return selected.value !== null;
-  });
+  const hasSelected = computed(() => selected.value !== null);
 
   const isLastRound = computed(() => {
     return currentIndex.value === caseRounds.value.length - 1;
@@ -41,10 +42,13 @@ export function useGameState({
 
   const resultTitle = computed(() => {
     const percent = score.value / caseRounds.value.length;
+    const time = elapsedSeconds.value;
 
+    if (percent === 1 && time <= 90) return "Elite Detective";
     if (percent === 1) return "Master Detective";
-    if (percent >= 0.75) return "Sharp Eye";
-    if (percent >= 0.5) return "Suspicious Thinker";
+    if (percent >= 0.85) return "Sharp Investigator";
+    if (percent >= 0.7) return "Case Solver";
+    if (percent >= 0.5) return "Rookie Detective";
     return "Easily Fooled";
   });
 
@@ -79,6 +83,81 @@ export function useGameState({
     };
   }
 
+  function resetGame() {
+    score.value = 0;
+    streak.value = 0;
+    currentIndex.value = 0;
+    selected.value = null;
+    gameFinished.value = false;
+    displayedRound.value = null;
+    results.value = [];
+    elapsedSeconds.value = 0;
+
+    prepareRound();
+  }
+
+  function resetState() {
+    score.value = 0;
+    streak.value = 0;
+    currentIndex.value = 0;
+    selected.value = null;
+    gameFinished.value = false;
+    displayedRound.value = null;
+    results.value = [];
+    elapsedSeconds.value = 0;
+    pendingChoice.value = null;
+    showConfirmModal.value = false;
+
+    prepareRound();
+  }
+
+  function saveGame() {
+    if (isRestoring.value) return;
+
+    localStorage.setItem(
+      unref(storageKey),
+      JSON.stringify({
+        score: score.value,
+        streak: streak.value,
+        currentIndex: currentIndex.value,
+        selected: selected.value,
+        gameFinished: gameFinished.value,
+        displayedRound: displayedRound.value,
+        results: results.value,
+        elapsedSeconds: elapsedSeconds.value,
+      }),
+    );
+  }
+
+  function loadGameForCurrentCase() {
+    isRestoring.value = true;
+
+    const saved = localStorage.getItem(unref(storageKey));
+
+    if (saved) {
+      const data = JSON.parse(saved);
+
+      score.value = data.score ?? 0;
+      streak.value = data.streak ?? 0;
+      currentIndex.value = data.currentIndex ?? 0;
+      selected.value = data.selected ?? null;
+      gameFinished.value = data.gameFinished ?? false;
+      displayedRound.value = data.displayedRound ?? null;
+      results.value = data.results ?? [];
+      elapsedSeconds.value = data.elapsedSeconds ?? 0;
+
+      if (!displayedRound.value) {
+        prepareRound();
+      }
+    } else {
+      resetState();
+    }
+
+    nextTick(() => {
+      isRestoring.value = false;
+    });
+  }
+
   function preloadImage(src) {
     const img = new Image();
     img.src = src;
@@ -96,7 +175,7 @@ export function useGameState({
     if (hasSelected.value) return;
 
     pendingChoice.value = choice;
-    showConfirmModal.value = true;
+    // showConfirmModal.value = true;
   }
 
   function cancelChoice() {
@@ -144,17 +223,10 @@ export function useGameState({
   }
 
   function restartGame() {
-    currentIndex.value = 0;
-    score.value = 0;
-    streak.value = 0;
-    selected.value = null;
-    gameFinished.value = false;
-    results.value = [];
-    elapsedSeconds.value = 0;
+    localStorage.removeItem(unref(storageKey));
 
-    localStorage.removeItem("suspicious-save");
+    resetState();
 
-    prepareRound();
     stopTimer();
     startTimer();
   }
@@ -179,29 +251,28 @@ export function useGameState({
     preloadRound(0);
     preloadRound(1);
 
-    const saved = localStorage.getItem("suspicious-save");
+    resetGame();
 
-    if (saved) {
-      const data = JSON.parse(saved);
-
-      score.value = data.score || 0;
-      streak.value = data.streak || 0;
-      currentIndex.value = data.currentIndex || 0;
-      selected.value = data.selected || null;
-      gameFinished.value = data.gameFinished || false;
-      displayedRound.value = data.displayedRound || null;
-      results.value = data.results || [];
-      elapsedSeconds.value = data.elapsedSeconds || 0;
-    }
-
-    if (!displayedRound.value) {
-      prepareRound();
-    }
-
-    if (!gameFinished.value) {
-      startTimer();
-    }
+    startTimer();
   });
+
+  onUnmounted(() => {
+    resetGame();
+    stopTimer();
+  });
+
+  watch(
+    () => unref(storageKey),
+    () => {
+      stopTimer();
+
+      loadGameForCurrentCase();
+
+      if (!gameFinished.value) {
+        startTimer();
+      }
+    },
+  );
 
   watch(
     [
@@ -214,21 +285,7 @@ export function useGameState({
       results,
       elapsedSeconds,
     ],
-    () => {
-      localStorage.setItem(
-        "suspicious-save",
-        JSON.stringify({
-          score: score.value,
-          streak: streak.value,
-          currentIndex: currentIndex.value,
-          selected: selected.value,
-          gameFinished: gameFinished.value,
-          displayedRound: displayedRound.value,
-          results: results.value,
-          elapsedSeconds: elapsedSeconds.value,
-        }),
-      );
-    },
+    saveGame,
     { deep: true },
   );
 
